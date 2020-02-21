@@ -3,7 +3,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const router = new Router({
-  mode: 'hash',
+  mode: 'history',
   base: '/',
   routes: [
     {
@@ -16,6 +16,14 @@ const router = new Router({
       path: '/blank',
       name: 'blank',
       component: resolve => (require(["@/views/blank/index"], resolve)),
+      meta: {
+        title: '传晟防疫登记平台'
+      }
+    },
+    {
+      path: '/detail',
+      name: 'detail',
+      component: resolve => (require(["@/views/blank/detail"], resolve)),
       meta: {
         title: '传晟防疫登记平台'
       }

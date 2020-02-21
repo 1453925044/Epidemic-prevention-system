@@ -1,108 +1,127 @@
 <template>
-  <div class="EmployeeInfo">
-    <div class="title">
-      <span>人员通行证信息核对</span>
-    </div>
-    <div class="intoCount">
-      <span>该用户累计入园次数</span>
-      <span>
-        <span class="count" :style="{color:countColor}">0</span>次
-      </span>
-    </div>
-    <div class="completion-info">
-      <span>1. 人员身份</span>
-      <van-radio-group class="radio" disabled v-model="radio">
-        <van-radio class="radioBox" name="1">工作人员</van-radio>
-        <van-radio class="radioBox" name="2">办事人员</van-radio>
-        <van-radio class="radioBox" name="3">来访人员</van-radio>
-      </van-radio-group>
-      <div class="inputBox">
-        <div v-for="(item,index) in inputInfo" :key="index">
-          <span>{{item.name}}</span>
-          <div class="input">
-            <span class="icon" v-html="item.icon" style="font-size:20px;">{{item.icon}}</span>
-            <van-field disabled style="background:#f5f5f5;" :placeholder="item.value" />
-          </div>
+    <div class="EmployeeInfo">
+        <div class="title">
+            <span>人员通行证信息核对</span>
         </div>
-      </div>
-     <div>
-        <span>7. 是否发热</span>
-        <van-radio-group class="radio" disabled v-model="radio2">
-            <van-radio class="radioBox" name="1">是</van-radio>
-            <van-radio class="radioBox" name="2">否</van-radio>
-        </van-radio-group>
-     </div>
-     <div>
-        <span class="radioTitle">8、1月1日后是否去过（湖北）或途径</span>
-        <van-radio-group class="radio" disabled v-model="radio">
-            <van-radio class="radioBox" name="1">是</van-radio>
-            <van-radio class="radioBox" name="2">否</van-radio>
-        </van-radio-group>
-     </div>
-      <div>
-        <span>9、1月1日后是否与疫区人员接触史</span>
-        <van-radio-group class="radio" disabled v-model="radio">
-            <van-radio class="radioBox" name="1">是</van-radio>
-            <van-radio class="radioBox" name="2">否</van-radio>
-        </van-radio-group>
-      </div>
-      <div>
-        <span>10、是否有疑似病症</span>
-        <van-radio-group class="radio" disabled v-model="radio">
-            <van-radio class="radioBox" name="1">呼吸困难</van-radio>
-            <van-radio class="radioBox" name="2">发热</van-radio>
-            <van-radio class="radioBox" name="3">乏力</van-radio>
-            <van-radio class="radioBox" name="4">喉咙疼痛</van-radio>
-            <van-radio class="radioBox" name="5">干咳</van-radio>
-            <van-radio class="radioBox" name="6">腹泻</van-radio>
-            <van-radio class="radioBox" name="7">流鼻涕</van-radio>
-            <van-radio class="radioBox" name="8">其他</van-radio>
-            <van-radio class="radioBox" name="9">无</van-radio>
-        </van-radio-group>
-      </div>
-      <div class="inputBox">
-        <div>
-          <span>11、体温</span>
-          <div class="input" style="border:1px solid #cccccc;border-radius:8px;background:white">
-            <span class="icon" v-html="temperature" style="font-size:20px;">{{temperature}}</span>
-            <van-field required type="number" placeholder="请输入当前体温" />
-          </div>
+        <div class="intoCount">
+            <span>该用户累计入园次数</span>
+            <span>
+                <span class="count" :style="{color:countColor}">0</span>次
+            </span>
         </div>
-      </div>
-    </div>
-    <div class="btnBox">
-      <van-button class="btn" plain type="info" size="large" @click="show = true">禁止进入</van-button>
-      <van-button class="btn" type="info" size="large" @click="passInto">允许进入</van-button>
-    </div>
-    <van-overlay :show="show">
-      <div class="wrapper" @click.stop="show = false">
-        <div class="block" @click.stop>
-          <div class="title">
-            <span>填写禁止进入原因</span>
-            <span>{{length}}/100</span>
-          </div>
-          <div class="textBox">
-            <textarea maxlength="100" v-model="textValue" @input="onInput" placeholder="请输入..."></textarea>
-          </div>
-          <div class="btnBox">
-            <van-button class="btn" plain type="info" style="color:#fff;background: rgba(0,0,0,0.3);border:1px solid #fff" size="large"  @click="cancel">取消</van-button>
-            <van-button class="btn" type="info" size="large" @click="submitSuccess">确定</van-button>
-          </div>
+        <div class="completion-info">
+            <span>1. 人员身份</span>
+            <van-radio-group class="radio" disabled v-model="radio">
+                <van-radio class="radioBox" name="1">工作人员</van-radio>
+                <van-radio class="radioBox" name="2">办事人员</van-radio>
+                <van-radio class="radioBox" name="3">来访人员</van-radio>
+            </van-radio-group>
+            <div class="inputBox">
+                <div v-for="(item,index) in inputInfo" :key="index">
+                    <span>{{item.name}}</span>
+                    <div class="input">
+                        <span class="icon" v-html="item.icon" style="font-size:20px;">{{item.icon}}</span>
+                        <van-field disabled style="background:#f5f5f5;" :placeholder="item.value" />
+                    </div>
+                </div>
+            </div>
+            <div>
+                <span>7. 是否发热</span>
+                <van-radio-group class="radio" disabled v-model="radio2">
+                    <van-radio class="radioBox" name="1">是</van-radio>
+                    <van-radio class="radioBox" name="2">否</van-radio>
+                </van-radio-group>
+            </div>
+            <div>
+                <span class="radioTitle">8、1月1日后是否去过（湖北）或途径</span>
+                <van-radio-group class="radio" disabled v-model="radio">
+                    <van-radio class="radioBox" name="1">是</van-radio>
+                    <van-radio class="radioBox" name="2">否</van-radio>
+                </van-radio-group>
+            </div>
+            <div>
+                <span>9、1月1日后是否与疫区人员接触史</span>
+                <van-radio-group class="radio" disabled v-model="radio">
+                    <van-radio class="radioBox" name="1">是</van-radio>
+                    <van-radio class="radioBox" name="2">否</van-radio>
+                </van-radio-group>
+            </div>
+            <div>
+                <span>10、是否有疑似病症</span>
+                <van-radio-group class="radio" disabled v-model="radio">
+                    <van-radio class="radioBox" name="1">呼吸困难</van-radio>
+                    <van-radio class="radioBox" name="2">发热</van-radio>
+                    <van-radio class="radioBox" name="3">乏力</van-radio>
+                    <van-radio class="radioBox" name="4">喉咙疼痛</van-radio>
+                    <van-radio class="radioBox" name="5">干咳</van-radio>
+                    <van-radio class="radioBox" name="6">腹泻</van-radio>
+                    <van-radio class="radioBox" name="7">流鼻涕</van-radio>
+                    <van-radio class="radioBox" name="8">其他</van-radio>
+                    <van-radio class="radioBox" name="9">无</van-radio>
+                </van-radio-group>
+            </div>
+            <div class="inputBox">
+                <div>
+                    <span>11、体温</span>
+                    <div
+                        class="input"
+                        style="border:1px solid #cccccc;border-radius:8px;background:white"
+                    >
+                        <span
+                            class="icon"
+                            v-html="temperature"
+                            style="font-size:20px;"
+                        >{{temperature}}</span>
+                        <van-field required type="number" placeholder="请输入当前体温" />
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </van-overlay>
-    <div class="ToastBox" v-if="toastShow">
-      <div class="dialog">
-        <van-icon
-          class="passicon"
-          :style="{color:toastInfo.color}"
-          :name="toastInfo.icon"
-          size="30px"
-        />
-        <span class="text">{{toastInfo.text}}</span>
-      </div>
+        <div class="btnBox">
+            <van-button class="btn" plain type="info" size="large" @click="show = true">禁止进入</van-button>
+            <van-button class="btn" type="info" size="large" @click="passInto">允许进入</van-button>
+        </div>
+        <van-overlay :show="show">
+            <div class="wrapper" @click.stop="show = false">
+                <div class="block" @click.stop>
+                    <div class="title">
+                        <span>填写禁止进入原因</span>
+                        <span>{{length}}/100</span>
+                    </div>
+                    <div class="textBox">
+                        <textarea
+                            maxlength="100"
+                            v-model="textValue"
+                            @input="onInput"
+                            placeholder="请输入..."
+                        ></textarea>
+                    </div>
+                    <div class="btnBox">
+                        <van-button
+                            class="btn"
+                            plain
+                            type="info"
+                            style="color:#fff;background: rgba(0,0,0,0.3);border:1px solid #fff"
+                            size="large"
+                            @click="cancel"
+                        >取消</van-button>
+                        <van-button class="btn" type="info" size="large" @click="submitSuccess">确定</van-button>
+                    </div>
+                </div>
+            </div>
+        </van-overlay>
+        <div class="ToastBox" v-if="toastShow">
+            <div class="dialog">
+                <van-icon
+                    class="passicon"
+                    :style="{color:toastInfo.color}"
+                    :name="toastInfo.icon"
+                    size="30px"
+                />
+                <span class="text">{{toastInfo.text}}</span>
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -119,7 +138,7 @@ export default {
       textValue: "",
       //countColor: "#ff5959",
       countColor: "#45ec55",
-      temperature: "&#xe600;",
+      temperature: "&#xe767;",
       toastInfo: {
         icon: "checked",
         text: "以允许进入",

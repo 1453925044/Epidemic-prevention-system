@@ -1,6 +1,7 @@
+
 import { get, post } from '@/http/http.js'
 
-const isRegist = (info) => post('/ar/silog', info)
+const intoCouunt = (info) => post('/ar/count', info)
 /* 
 参数:
 person_id 用户id
@@ -8,7 +9,7 @@ person_id 用户id
 	success: true/false 成功/失败
 	message: 成功错误返回消息
 	date: 
-	  logs 日志信息 */
+	  count: 次数 */
 export {
-	isRegist
+    intoCouunt
 }
