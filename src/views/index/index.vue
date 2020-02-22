@@ -222,18 +222,18 @@ export default {
         .then(res => {
           if (res.success) {
             console.log(res);
-            // this.$toast({
-            //   message: "提交成功",
-            //   onClose: () => {
-            //     this.$router.push({
-            //       path: "./fangyi",
-            //       query: {
-            //         code: 1,
-            //         state: 123
-            //       }
-            //     });
-            //   }
-            // });
+            this.$toast({
+              message: res.message,
+              onClose: () => {
+                this.$router.push({
+                  path: "./fangyi",
+                  query: {
+                    code: 1,
+                    state: 123
+                  }
+                });
+              }
+            });
           } else {
             this.$toast(res.message);
           }
