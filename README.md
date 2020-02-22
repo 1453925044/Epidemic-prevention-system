@@ -2,7 +2,7 @@
 
 > 
 
-## Build Setup
+## build setup
 
 
 # install dependencies
