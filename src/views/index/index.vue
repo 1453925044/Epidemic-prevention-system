@@ -217,7 +217,7 @@ export default {
         contact: this.contact,
         hubei: this.hubei,
         isfever: this.isfever,
-        seemingly: this.seemingly
+        seemingly: "无"
       })
         .then(res => {
           if (res.success) {
@@ -228,14 +228,15 @@ export default {
                 this.$router.push({
                   path: "./fangyi",
                   query: {
-                    code: 1,
-                    state: 123
+                    openid: this.weichatid,
+                    orgid: this.orgid,
+                    data: res.data.person
                   }
                 });
               }
             });
           } else {
-            this.$toast(res.message);
+            this.$toast(res.message + "请检查填写信息");
           }
         })
         .catch(err => {
