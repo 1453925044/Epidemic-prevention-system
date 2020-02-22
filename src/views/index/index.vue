@@ -1,3 +1,4 @@
+import { isLogin } from '../../api/isLogin/isLogin';
 <template>
     <div class="container">
         <div class="desc">
@@ -14,12 +15,7 @@
                 </div>
                 <div class="from-radio">
                     <van-cell-group>
-                        <van-field
-                            class="icon iconxingming"
-                            v-model="name"
-                            placeholder="请填写真实姓名"
-                            :rules="[{ required: true, message: '请填写真实姓名' }]"
-                        >
+                        <van-field class="icon iconxingming" v-model="name" placeholder="请填写真实姓名">
                             <span slot="left-icon" class="icon">&#xe605;</span>
                         </van-field>
                     </van-cell-group>
@@ -41,7 +37,7 @@
             </div>
             <div class="from-row">
                 <div class="from-title">
-                    <span class="num">4、</span>
+                    <span class="num">3、</span>
                     <span class="title">籍贯</span>
                     <span class="type">(必填)</span>
                 </div>
@@ -59,7 +55,7 @@
             </div>
             <div class="from-row">
                 <div class="from-title">
-                    <span class="num">5、</span>
+                    <span class="num">4、</span>
                     <span class="title">现住址</span>
                     <span class="type">(必填)</span>
                 </div>
@@ -77,9 +73,8 @@
             </div>
             <div class="from-row">
                 <div class="from-title">
-                    <span class="num">6、</span>
+                    <span class="num">5、</span>
                     <span class="title">车牌号</span>
-                    <span class="type">(必填)</span>
                 </div>
                 <div class="from-radio">
                     <van-cell-group>
@@ -91,8 +86,8 @@
             </div>
             <div class="from-row">
                 <div class="from-title">
-                    <span class="num">7、</span>
-                    <span class="title">手机号和验证码</span>
+                    <span class="num">6、</span>
+                    <span class="title">手机号</span>
                     <span class="type">(必填)</span>
                 </div>
                 <div class="from-radio">
@@ -109,53 +104,53 @@
             </div>
             <div class="from-row">
                 <div class="from-title">
-                    <span class="num">8、</span>
+                    <span class="num">7、</span>
                     <span class="title">是否发热</span>
-                    <span class="type">(必填)</span>
+                    <span class="type">(必选)</span>
                 </div>
                 <div class="from-radio">
-                    <van-radio-group v-model="radio" direction="horizontal" :icon-size="18">
+                    <van-radio-group v-model="isfever" direction="horizontal" :icon-size="18">
                         <van-radio name="1">是</van-radio>
-                        <van-radio name="2">否</van-radio>
+                        <van-radio name="0">否</van-radio>
+                    </van-radio-group>
+                </div>
+            </div>
+            <div class="from-row">
+                <div class="from-title">
+                    <span class="num">8、</span>
+                    <span class="title">1月1日后是否去过(湖北)</span>
+                    <span class="type">(必选)</span>
+                </div>
+                <div class="from-radio">
+                    <van-radio-group v-model="hubei" direction="horizontal" :icon-size="18">
+                        <van-radio name="1">是</van-radio>
+                        <van-radio name="0">否</van-radio>
                     </van-radio-group>
                 </div>
             </div>
             <div class="from-row">
                 <div class="from-title">
                     <span class="num">9、</span>
-                    <span class="title">1月1日后是否去过(湖北)</span>
-                    <span class="type">(必填)</span>
+                    <span class="title">1月1日后是否与疫区人员接触史</span>
+                    <span class="type">(必选)</span>
                 </div>
                 <div class="from-radio">
-                    <van-radio-group v-model="radio" direction="horizontal" :icon-size="18">
+                    <van-radio-group v-model="contact" direction="horizontal" :icon-size="18">
                         <van-radio name="1">是</van-radio>
-                        <van-radio name="2">否</van-radio>
+                        <van-radio name="0">否</van-radio>
                     </van-radio-group>
                 </div>
             </div>
             <div class="from-row">
                 <div class="from-title">
                     <span class="num">10、</span>
-                    <span class="title">1月1日后是否与疫区人员接触史</span>
-                    <span class="type">(必填)</span>
-                </div>
-                <div class="from-radio">
-                    <van-radio-group v-model="radio" direction="horizontal" :icon-size="18">
-                        <van-radio name="1">是</van-radio>
-                        <van-radio name="2">否</van-radio>
-                    </van-radio-group>
-                </div>
-            </div>
-            <div class="from-row">
-                <div class="from-title">
-                    <span class="num">11、</span>
                     <span class="title">是否有疑似症状</span>
-                    <span class="type">(必填)</span>
+                    <span class="type">(必选)</span>
                 </div>
                 <div class="from-radio">
                     <van-radio-group
                         style="justify-content: space-between;"
-                        v-model="radio"
+                        v-model="seemingly"
                         direction="horizontal"
                         :icon-size="18"
                     >
@@ -202,11 +197,16 @@ export default {
       checked: true
     };
   },
-  created() {},
+  mounted() {
+    this.orgid = this.$route.query.state;
+    this.weichatid = this.$route.query.openid;
+    console.log(this.orgid);
+    console.log(this.weichatid);
+  },
   methods: {
     submit() {
       addUser({
-        orgid: "",
+        orgid: this.orgid,
         weichatid: this.weichatid,
         name: this.name,
         idno: this.idno,
@@ -216,23 +216,24 @@ export default {
         carno: this.carno,
         contact: this.contact,
         hubei: this.hubei,
-        isfever: "",
-        seemingly: ""
+        isfever: this.isfever,
+        seemingly: this.seemingly
       })
         .then(res => {
-          if (res.success && res.rows) {
-            this.$toast({
-              message: "提交成功",
-              onClose: () => {
-                this.$router.push({
-                  path: "./fangyi",
-                  query: {
-                    code: 1,
-                    state: 123
-                  }
-                });
-              }
-            });
+          if (res.success) {
+            console.log(res);
+            // this.$toast({
+            //   message: "提交成功",
+            //   onClose: () => {
+            //     this.$router.push({
+            //       path: "./fangyi",
+            //       query: {
+            //         code: 1,
+            //         state: 123
+            //       }
+            //     });
+            //   }
+            // });
           } else {
             this.$toast(res.message);
           }

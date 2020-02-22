@@ -1,6 +1,8 @@
 import { isLogin } from '../../api/isLogin/isLogin';
 <template>
-    <div></div>
+    <div>
+        <input type="text" v-model="code" />
+    </div>
 </template>
 <script>
 import { isLogin } from "@/api/isLogin/isLogin.js";
@@ -8,7 +10,8 @@ export default {
   data() {
     return {
       state: "",
-      code: ""
+      code: "",
+      openid: ""
     };
   },
   mounted() {
@@ -18,6 +21,7 @@ export default {
     // 获取地址栏微信返回的code参数和扫码地区标识state参数
     UrlSearch() {
       var name, value;
+      var newArr = [];
       var str = location.href; //取得整个地址栏
       var num = str.indexOf("?");
       str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
@@ -27,21 +31,15 @@ export default {
         if (num > 0) {
           name = arr[i].substring(0, num);
           value = arr[i].substr(num + 1);
-          if (name == "state") {
-            this.state = value;
-          } else if (name == "code") {
-            this.code = value;
-          }
+          newArr.push(value);
+          console.log(newArr);
         }
       }
+      this.code = newArr[0];
+      this.state = newArr[1];
+      console.log(this.code);
+      console.log(this.state);
       return this.getParse();
-      //   this.$router.push({
-      //     path: "/index",
-      //     query: {
-      //       state: this.state,
-      //       code: this.code
-      //     }
-      //   });
     },
     getParse() {
       isLogin({
@@ -49,15 +47,27 @@ export default {
       })
         .then(res => {
           console.log(res);
-          if (res.success) {
+          if (res.errCode == "1000") {
             this.$toast(res.message);
+            this.$router.push({
+              path: "/index",
+              query: {
+                state: this.state,
+                openid: res.data.openid
+              }
+            });
           } else {
-            this.$toast(res.message);
+            this.$router.push({
+              path: "/fangyi",
+              query: {
+                code: this.code,
+                state: this.state
+              }
+            });
           }
         })
         .catch(err => {
           this.$toast(err.message);
-          console.log(err);
         });
     }
   }
