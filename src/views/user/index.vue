@@ -42,10 +42,10 @@
             <van-button @click="jump">修改个人信息</van-button>
         </div>
         <div class="desc">
-            <p>传晟信息服务抗疫防控平台</p>
-            <p>技术支持：成都传晟信息技术有限公司</p>
+            <span>大厅防役登记平台</span>
+            <span>技术支持：成都传晟信息技术有限公司</span>
         </div>
-        <van-popup v-model="show" round position="bottom" :style="{ height: '40%' }">
+        <van-popup v-model="show" round position="bottom" :style="{ height: '45%' }">
             <div class="popup-content">
                 <p>
                     <span
@@ -74,8 +74,8 @@
 </template>
 <script>
 import QRCode from "qrcodejs2";
-import { isRegist } from "@/api/isRegist/isRegist.js";
 import { addLog } from "@/api/addLog/addLog.js";
+import { isRegist } from "@/api/isRegist/isRegist.js";
 let timer = null;
 export default {
   components: {
@@ -83,14 +83,13 @@ export default {
   },
   data() {
     return {
+      count: 0,
       show: false,
       isPopup: true,
       orgid: "",
-      weichatid: "",
       person: {},
-      count: 0,
-      link: "http://www.chinabdc.cn/employeeInfo",
       record: [],
+      weichatid: ""
     };
   },
   mounted() {
@@ -103,10 +102,9 @@ export default {
     });
     timer = setInterval(() => {
       this.getInto();
-    }, 3000);
+    }, 2000);
   },
   destroyed() {
-    console.log(1111);
     clearInterval(timer);
   },
   methods: {
@@ -148,10 +146,10 @@ export default {
           } else {
             this.show = false;
           }
-          console.log(this.count);
         })
         .catch(err => {
           this.show = false;
+          this.$toast(err.message);
         });
     },
     jump() {
@@ -255,8 +253,12 @@ export default {
   }
   .desc {
     width: 100%;
-    margin: 8px auto;
-    p {
+    display: flex;
+    margin: 16px auto;
+    align-items: center;
+    flex-direction: column;
+    span {
+      font-size: 13px;
       color: #b2b2b2;
       text-align: center;
     }

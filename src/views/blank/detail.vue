@@ -30,7 +30,6 @@ export default {
           name = arr[i].substring(0, num);
           value = arr[i].substr(num + 1);
           newArr.push(value);
-          console.log(newArr);
         }
       }
       this.code = newArr[0];

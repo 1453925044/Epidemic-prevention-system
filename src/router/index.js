@@ -17,7 +17,7 @@ const router = new Router({
       name: 'blank',
       component: resolve => (require(["@/views/blank/index"], resolve)),
       meta: {
-        title: '传晟防疫登记平台'
+        title: '大厅防役登记平台'
       }
     },
     {
@@ -25,7 +25,7 @@ const router = new Router({
       name: 'detail',
       component: resolve => (require(["@/views/blank/detail"], resolve)),
       meta: {
-        title: '传晟防疫登记平台'
+        title: '大厅防役登记平台'
       }
     },
     {
@@ -33,7 +33,7 @@ const router = new Router({
       name: 'employees',
       component: resolve => (require(["@/views/blank/employees"], resolve)),
       meta: {
-        title: '传晟防疫登记平台'
+        title: '大厅防役登记平台'
       }
     },
     {
@@ -41,7 +41,7 @@ const router = new Router({
       name: 'index',
       component: resolve => (require(["@/views/index/index"], resolve)),
       meta: {
-        title: '传晟防疫登记平台'
+        title: '大厅防役登记平台'
       }
     },
     {
@@ -49,7 +49,7 @@ const router = new Router({
       name: 'fangyi',
       component: resolve => (require(["@/views/user/index"], resolve)),
       meta: {
-        title: '员工信息'
+        title: '人员信息'
       }
     },
     {

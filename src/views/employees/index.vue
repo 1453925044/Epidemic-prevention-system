@@ -6,7 +6,7 @@
         <div class="intoCount">
             <span>该用户累计入园次数</span>
             <span>
-                <span class="count" :style="{color:countColor}">{{intoCount}}</span>次
+                <span class="count" :style="{color:countColor}">{{intoCount}}次</span>
             </span>
         </div>
         <div class="completion-info">
@@ -201,8 +201,8 @@ export default {
   created() {
     this.userId = this.$route.query.userId;
     this.prjId = this.$route.query.prjId;
-    this.getUserInfo();
     this.getCount();
+    this.getUserInfo();
   },
   methods: {
     // 动态改变对象属性值
@@ -214,7 +214,6 @@ export default {
       );
       this.$set(this.person, "contact", this.person.contact == 0 ? "否" : "是");
       this.$set(this.person, "hubei", this.person.hubei == 0 ? "否" : "是");
-      console.log(this.person);
     },
     getUserInfo() {
       getInto({
@@ -331,7 +330,7 @@ export default {
     height: 48px;
     margin-top: 16px;
     border-radius: 6px;
-    font-size: 16px;
+    font-size: 14px;
     padding: 0px 10px;
     box-sizing: border-box;
     display: flex;
@@ -414,7 +413,7 @@ export default {
     }
   }
   .title {
-    font-size: 20px;
+    font-size: 26px;
     color: #409eff;
     font-weight: 600;
   }
@@ -434,25 +433,25 @@ export default {
     }
     .inputBox {
       margin-top: 14px;
-      .textBox{
-        margin-top: 5px;
+      .textBox {
+        padding-top: 10px;
       }
       .beizhu {
         width: 100%;
         height: 150px;
         padding: 10px;
-        box-sizing: border-box;
         border-radius: 8px;
+        box-sizing: border-box;
+        border: 1px solid rgb(204, 204, 204);
       }
       .input {
         width: 100%;
-        height: 50px;
         display: flex;
-        align-items: center;
-        background: #f5f5f5;
         margin: 10px 0;
         border-radius: 8px;
         padding-left: 10px;
+        align-items: center;
+        background: #f5f5f5;
         box-sizing: border-box;
       }
     }

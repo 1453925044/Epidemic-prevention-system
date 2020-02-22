@@ -160,10 +160,10 @@
                 </div>
                 <div class="from-radio">
                     <van-checkbox-group
-                        style="margin-left:16px;"
+                        style="margin-left:20px;display:flex;justify-content:space-between;"
                         v-model="seemingly"
                         direction="horizontal"
-                        :icon-size="20"
+                        :icon-size="19"
                     >
                         <van-checkbox class="checkBox" name="呼吸困难">呼吸困难</van-checkbox>
                         <van-checkbox class="checkBox" name="发热">发热</van-checkbox>
@@ -214,12 +214,9 @@ export default {
   mounted() {
     this.orgid = this.$route.query.state;
     this.weichatid = this.$route.query.openid;
-    console.log(this.$route.query);
-    console.log(this.weichatid);
     if (this.$route.query.hasOwnProperty("prefix")) {
       this.prefix = Boolean(this.$route.query.prefix);
       let data = JSON.parse(this.$route.query.data);
-      console.log(data);
       this.weichatid = data.weichat_id;
       this.orgid = data.orgid;
       this.name = data.name;
@@ -232,7 +229,6 @@ export default {
       this.hubei = data.hubei == "否" ? "0" : "1";
       this.contact = data.contact == "否" ? "0" : "1";
       this.checkedIsDisable = data.is_seemingly;
-      console.log(data.is_seemingly.split(","));
       this.seemingly = data.is_seemingly.split(",");
     }
   },
@@ -241,10 +237,10 @@ export default {
       if (this.prefix) {
         this.modify();
       } else {
-        this.add();
+        this.addInfo();
       }
     },
-    add() {
+    addInfo() {
       if (
         this.name === "" ||
         this.idno === "" ||
@@ -276,7 +272,6 @@ export default {
         })
           .then(res => {
             if (res.success) {
-              console.log(res);
               this.$toast({
                 message: res.message,
                 onClose: () => {
@@ -326,7 +321,6 @@ export default {
         })
           .then(res => {
             if (res.success) {
-              console.log(res);
               this.$toast({
                 message: res.message,
                 onClose: () => {
@@ -381,9 +375,9 @@ export default {
     margin-top: 16px;
     .from-row {
       width: 100%;
-      padding-bottom: 12px;
+      margin-bottom: 10px;
       .from-title {
-        padding-bottom: 12px;
+        padding: 6px 0;
         span {
           font-size: 14px;
         }
@@ -397,7 +391,7 @@ export default {
       }
       .from-radio {
         .checkBox {
-          width: 28%;
+          width: 22%;
           margin-top: 10px;
         }
         .van-radio-group {
@@ -420,6 +414,7 @@ export default {
           border-radius: 8px;
           border: 1px solid @base-color;
           .van-cell {
+            padding: 8px 0.42667rem;
             border-radius: 8px;
           }
         }
@@ -427,6 +422,7 @@ export default {
     }
     .bottom {
       width: 100%;
+      margin-top: 24px;
       .van-checkbox {
         .van-checkbox__icon {
           .van-icon {
@@ -441,7 +437,7 @@ export default {
       }
       .van-button {
         width: 100%;
-        margin: 42px 0 21px 0;
+        margin: 24px 0;
         border-radius: 8px;
       }
     }

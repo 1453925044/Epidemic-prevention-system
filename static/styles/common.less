@@ -1,12 +1,25 @@
 /* 全局公共样式 */
 @font-face {
     font-family: 'icon';
-    src: url('//at.alicdn.com/t/font_1649105_p602ufr66f.eot');
-    src: url('//at.alicdn.com/t/font_1649105_p602ufr66f.eot?#iefix') format('embedded-opentype'),
-        url('//at.alicdn.com/t/font_1649105_p602ufr66f.woff2') format('woff2'),
-        url('//at.alicdn.com/t/font_1649105_p602ufr66f.woff') format('woff'),
-        url('//at.alicdn.com/t/font_1649105_p602ufr66f.ttf') format('truetype'),
-        url('//at.alicdn.com/t/font_1649105_p602ufr66f.svg#iconfont') format('svg');
+    src: url('/static/font/iconfont.eot');
+    src: url('/static/font/iconfont.ttf') format('truetype'),
+        url('/static/font/iconfont.woff2') format('woff2'),
+        url('/static/font/iconfont.woff') format('woff'),
+        url('/static/font/iconfont.svg') format('svg');
+}
+
+@font-face {
+    font-family: medium;
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+    src: url('https://www.chinabdc.cn:8092/H5/font/PingFangSC-Medium.ttf') format('truetype'),
+        url('/static/font/PingFangSC-Medium.ttf');
+}
+
+html,
+body {
+    font-family: medium;
 }
 
 .icon {
