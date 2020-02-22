@@ -29,6 +29,14 @@ const router = new Router({
       }
     },
     {
+      path: '/employees',
+      name: 'employees',
+      component: resolve => (require(["@/views/blank/employees"], resolve)),
+      meta: {
+        title: '传晟防疫登记平台'
+      }
+    },
+    {
       path: '/index',
       name: 'index',
       component: resolve => (require(["@/views/index/index"], resolve)),

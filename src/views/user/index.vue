@@ -55,16 +55,16 @@
                 </p>
                 <div class="success" v-if="isPopup">
                     <p>
-                        <span class="count">今日已入园{{1}}次</span>
+                        <span class="count">今日已进入{{record.length}}次</span>
                     </p>
                     <p class="count" v-for="(item,index) in record" :key="index">
-                        <span class="time">{{index+1}}、{{item.time}}</span>
-                        <span class="time">进入园区</span>
+                        <span class="time">{{index+1}}、{{item.create_date}}</span>
+                        <span class="time">进入</span>
                     </p>
                 </div>
                 <div class="fail" v-else>
                     <p class="count">
-                        <span>入园失败</span>
+                        <span>进入失败</span>
                     </p>
                     <p class="time">体温偏高,请检查登记</p>
                 </div>
@@ -74,66 +74,40 @@
 </template>
 <script>
 import QRCode from "qrcodejs2";
+import { isRegist } from "@/api/isRegist/isRegist.js";
 import { addLog } from "@/api/addLog/addLog.js";
+let timer = null;
 export default {
   components: {
     QRCode
   },
   data() {
     return {
-      show: true,
+      show: false,
       isPopup: true,
-      link: "https://baidu.com",
-      record: [
-        {
-          time: "10:02:14"
-        },
-        {
-          time: "10:02:14"
-        }
-      ],
-      fromList: [
-        {
-          title: "籍贯",
-          data: "四川"
-        },
-        {
-          title: "车牌",
-          data: "无"
-        },
-        {
-          title: "敏感区域接触史",
-          data: "否"
-        },
-        {
-          title: "是否发热",
-          data: "否"
-        },
-        {
-          title: "途经区域接触史",
-          data: "否"
-        },
-        {
-          title: "疑似症状",
-          data: "无"
-        }
-      ],
       orgid: "",
       weichatid: "",
-      person: {}
+      person: {},
+      count: 0,
+      link: "http://www.chinabdc.cn/employeeInfo",
+      record: [],
     };
   },
   mounted() {
     this.orgid = this.$route.query.orgid;
     this.weichatid = this.$route.query.openid;
     this.person = JSON.parse(this.$route.query.data);
-    console.log(this.orgid);
-    console.log(this.weichatid);
-    console.log(this.person);
     this.$nextTick(function() {
       this.qrcode();
       this.handle();
     });
+    timer = setInterval(() => {
+      this.getInto();
+    }, 3000);
+  },
+  destroyed() {
+    console.log(1111);
+    clearInterval(timer);
   },
   methods: {
     // 动态改变对象属性值
@@ -149,14 +123,36 @@ export default {
     //  生成二维码
     qrcode() {
       let that = this;
+      let url = `http://www.chinabdc.cn/blank/?id=${that.person.id}`;
       let qrcode = new QRCode("qrcode", {
-        width: 124,
-        height: 124, // 高度
-        text: this.link, // 二维码内容
+        width: 192,
+        height: 192, // 高度
+        text: url, // 二维码内容
         render: "canvas", // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
         background: "#409eff", // 背景色
         foreground: "#409eff" // 前景色
       });
+    },
+    // 查询进入次数
+    getInto() {
+      isRegist({
+        person_id: this.person.id
+      })
+        .then(res => {
+          if (res.success) {
+            if (this.count < res.data.logs.length) {
+              this.show = true;
+              this.count = res.data.logs.length;
+            }
+            this.record = res.data.logs;
+          } else {
+            this.show = false;
+          }
+          console.log(this.count);
+        })
+        .catch(err => {
+          this.show = false;
+        });
     },
     jump() {
       this.$router.push({

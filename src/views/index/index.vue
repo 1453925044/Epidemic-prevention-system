@@ -163,7 +163,7 @@
                         style="margin-left:16px;"
                         v-model="seemingly"
                         direction="horizontal"
-                        :icon-size="18"
+                        :icon-size="20"
                     >
                         <van-checkbox class="checkBox" name="呼吸困难">呼吸困难</van-checkbox>
                         <van-checkbox class="checkBox" name="发热">发热</van-checkbox>
@@ -189,6 +189,7 @@
 </template>
 <script>
 import { addUser } from "@/api/addUser/addUser.js";
+import { modifyUser } from "@/api/modifyUser/modifyUser.js";
 export default {
   data() {
     return {
@@ -219,6 +220,8 @@ export default {
       this.prefix = Boolean(this.$route.query.prefix);
       let data = JSON.parse(this.$route.query.data);
       console.log(data);
+      this.weichatid = data.weichat_id;
+      this.orgid = data.orgid;
       this.name = data.name;
       this.idno = data.id_no;
       this.birthplace = data.birthplace;
@@ -234,19 +237,20 @@ export default {
     }
   },
   methods: {
-    aaa(e) {
-      console.log(e);
-      console.log(this.seemingly);
-      console.log(this.seemingly.toString());
-    },
     submit() {
+      if (this.prefix) {
+        this.modify();
+      } else {
+        this.add();
+      }
+    },
+    add() {
       if (
         this.name === "" ||
         this.idno === "" ||
         this.address === "" ||
         this.birthplace === "" ||
         this.mobileno === "" ||
-        this.carno === "" ||
         this.isfever === "" ||
         this.hubei === "" ||
         this.contact === "" ||
@@ -257,6 +261,56 @@ export default {
         this.$toast("请勾选承诺");
       } else {
         addUser({
+          orgid: this.orgid,
+          weichatid: this.weichatid,
+          name: this.name,
+          idno: this.idno,
+          address: this.address,
+          birthplace: this.birthplace,
+          mobileno: this.mobileno,
+          carno: this.carno,
+          contact: this.contact,
+          hubei: this.hubei,
+          isfever: this.isfever,
+          seemingly: this.seemingly.toString()
+        })
+          .then(res => {
+            if (res.success) {
+              console.log(res);
+              this.$toast({
+                message: res.message,
+                onClose: () => {
+                  this.$router.push({
+                    path: "./fangyi",
+                    query: {
+                      openid: this.weichatid,
+                      orgid: this.orgid,
+                      data: JSON.stringify(res.data.person)
+                    }
+                  });
+                }
+              });
+            } else {
+              this.$toast(res.message + "请检查填写信息");
+            }
+          })
+          .catch(err => {
+            this.$toast(err.message);
+          });
+      }
+    },
+    modify() {
+      if (
+        this.isfever === "" ||
+        this.hubei === "" ||
+        this.contact === "" ||
+        this.seemingly === []
+      ) {
+        this.$toast("请填写完整信息");
+      } else if (!this.checked) {
+        this.$toast("请勾选承诺");
+      } else {
+        modifyUser({
           orgid: this.orgid,
           weichatid: this.weichatid,
           name: this.name,

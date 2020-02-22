@@ -6,8 +6,8 @@ import { isLogin } from "@/api/isLogin/isLogin.js";
 export default {
   data() {
     return {
-      state: "",
       code: "",
+      userId: "",
       openid: ""
     };
   },
@@ -34,9 +34,9 @@ export default {
         }
       }
       this.code = newArr[0];
-      this.state = newArr[1];
+      this.userId = newArr[1];
       console.log(this.code);
-      console.log(this.state);
+      console.log(this.userId);
       this.getParse();
     },
     getParse() {
@@ -44,24 +44,17 @@ export default {
         code: this.code
       })
         .then(res => {
-          if (res.errCode == "1000") {
-            this.$toast(res.message);
+          if (res.data.person.can_verify == 1) {
+            alert("欢迎审核工作人员");
             this.$router.push({
-              path: "/index",
+              path: "/employeeInfo",
               query: {
-                state: this.state,
-                openid: res.data.openid
+                userId: this.userId,
+                prjId: res.data.person.id
               }
             });
           } else {
-            this.$router.push({
-              path: "/fangyi",
-              query: {
-                code: this.code,
-                state: this.state,
-                data: JSON.stringify(res.data.person)
-              }
-            });
+            this.$toast("抱歉，您没有审核权限");
           }
         })
         .catch(err => {
