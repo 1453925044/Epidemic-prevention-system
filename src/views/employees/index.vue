@@ -6,11 +6,11 @@
         <div class="intoCount">
             <span>该用户累计入园次数</span>
             <span>
-                <span class="count" :style="{color:countColor}">0</span>次
+                <span class="count" :style="{color:countColor}">{{intoCount}}</span>次
             </span>
         </div>
         <div class="completion-info">
-            <span>1. 人员身份</span>
+            <span>1、人员身份</span>
             <van-radio-group class="radio" disabled v-model="radio">
                 <van-radio class="radioBox" name="1">工作人员</van-radio>
                 <van-radio class="radioBox" name="2">办事人员</van-radio>
@@ -27,38 +27,38 @@
             </div>
             <div>
                 <span>7. 是否发热</span>
-                <van-radio-group class="radio" disabled v-model="radio2">
+                <van-radio-group class="radio" disabled v-model="isfever">
                     <van-radio class="radioBox" name="1">是</van-radio>
                     <van-radio class="radioBox" name="2">否</van-radio>
                 </van-radio-group>
             </div>
             <div>
                 <span class="radioTitle">8、1月1日后是否去过（湖北）或途径</span>
-                <van-radio-group class="radio" disabled v-model="radio">
+                <van-radio-group class="radio" disabled v-model="hubei">
                     <van-radio class="radioBox" name="1">是</van-radio>
                     <van-radio class="radioBox" name="2">否</van-radio>
                 </van-radio-group>
             </div>
             <div>
                 <span>9、1月1日后是否与疫区人员接触史</span>
-                <van-radio-group class="radio" disabled v-model="radio">
+                <van-radio-group class="radio" disabled v-model="contact">
                     <van-radio class="radioBox" name="1">是</van-radio>
                     <van-radio class="radioBox" name="2">否</van-radio>
                 </van-radio-group>
             </div>
             <div>
                 <span>10、是否有疑似病症</span>
-                <van-radio-group class="radio" disabled v-model="radio">
-                    <van-radio class="radioBox" name="1">呼吸困难</van-radio>
-                    <van-radio class="radioBox" name="2">发热</van-radio>
-                    <van-radio class="radioBox" name="3">乏力</van-radio>
-                    <van-radio class="radioBox" name="4">喉咙疼痛</van-radio>
-                    <van-radio class="radioBox" name="5">干咳</van-radio>
-                    <van-radio class="radioBox" name="6">腹泻</van-radio>
-                    <van-radio class="radioBox" name="7">流鼻涕</van-radio>
-                    <van-radio class="radioBox" name="8">其他</van-radio>
-                    <van-radio class="radioBox" name="9">无</van-radio>
-                </van-radio-group>
+                <van-checkbox-group class="radio" disabled v-model="seemingly">
+                    <van-checkbox class="radioBox" name="1">呼吸困难</van-checkbox>
+                    <van-checkbox class="radioBox" name="2">发热</van-checkbox>
+                    <van-checkbox class="radioBox" name="3">乏力</van-checkbox>
+                    <van-checkbox class="radioBox" name="4">喉咙疼痛</van-checkbox>
+                    <van-checkbox class="radioBox" name="5">干咳</van-checkbox>
+                    <van-checkbox class="radioBox" name="6">腹泻</van-checkbox>
+                    <van-checkbox class="radioBox" name="7">流鼻涕</van-checkbox>
+                    <van-checkbox class="radioBox" name="8">其他</van-checkbox>
+                    <van-checkbox class="radioBox" name="9">无</van-checkbox>
+                </van-checkbox-group>
             </div>
             <div class="inputBox">
                 <div>
@@ -125,20 +125,26 @@
 </template>
 
 <script>
+import { intoCouunt } from "@/api/count/count.js";
 import { Toast } from "vant";
 export default {
   data() {
     return {
       radio: "1",
       radio2: "2",
+      contact: "", //是否接触过疫区人员或途经疫区人员,0、未接触 1、接触过
+      hubei: "", //是否去过湖北或途经湖北,0、未去地过、未途径 1、去过或经过
+      isfever: "", // 是否发热,0、不发热 1、发热
+      seemingly: ["1", "2"],
       text: "",
       length: 0,
       show: false,
       toastShow: false,
       textValue: "",
+      intoCount: "",
       //countColor: "#ff5959",
       countColor: "#45ec55",
-      temperature: "&#xe767;",
+      temperature: "&#xe600;",
       toastInfo: {
         icon: "checked",
         text: "以允许进入",
@@ -179,7 +185,26 @@ export default {
       ]
     };
   },
+  created() {
+    this.getCount();
+  },
   methods: {
+    getCount() {
+      intoCouunt({
+        person_id: 2
+      })
+        .then(res => {
+          this.intoCount = res.data.count;
+          if (this.intoCount > 0) {
+            this.countColor = "#45ec55";
+          } else {
+            this.countColor = "#ff5959";
+          }
+        })
+        .catch(err => {
+          this.dialog("clear", res.message, "#ff6b6b");
+        });
+    },
     cancel() {
       this.show = false;
       this.textValue = "";

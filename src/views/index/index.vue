@@ -1,4 +1,3 @@
-import { isLogin } from '../../api/isLogin/isLogin';
 <template>
     <div class="container">
         <div class="desc">
@@ -11,11 +10,16 @@ import { isLogin } from '../../api/isLogin/isLogin';
                 <div class="from-title">
                     <span class="num">1、</span>
                     <span class="title">姓名</span>
-                    <span class="type">(必填)</span>
+                    <span class="type" v-if="!prefix">(必填)</span>
                 </div>
                 <div class="from-radio">
                     <van-cell-group>
-                        <van-field class="icon iconxingming" v-model="name" placeholder="请填写真实姓名">
+                        <van-field
+                            class="icon iconxingming"
+                            v-model="name"
+                            placeholder="请填写真实姓名"
+                            :disabled="prefix"
+                        >
                             <span slot="left-icon" class="icon">&#xe605;</span>
                         </van-field>
                     </van-cell-group>
@@ -25,11 +29,16 @@ import { isLogin } from '../../api/isLogin/isLogin';
                 <div class="from-title">
                     <span class="num">2、</span>
                     <span class="title">身份证</span>
-                    <span class="type">(必填)</span>
+                    <span class="type" v-if="!prefix">(必填)</span>
                 </div>
                 <div class="from-radio">
                     <van-cell-group>
-                        <van-field class="icon iconxingming" v-model="idno" placeholder="请填写身份证号">
+                        <van-field
+                            class="icon iconxingming"
+                            v-model="idno"
+                            placeholder="请填写身份证号"
+                            :disabled="prefix"
+                        >
                             <span slot="left-icon" class="icon">&#xe6d7;</span>
                         </van-field>
                     </van-cell-group>
@@ -39,7 +48,7 @@ import { isLogin } from '../../api/isLogin/isLogin';
                 <div class="from-title">
                     <span class="num">3、</span>
                     <span class="title">籍贯</span>
-                    <span class="type">(必填)</span>
+                    <span class="type" v-if="!prefix">(必填)</span>
                 </div>
                 <div class="from-radio">
                     <van-cell-group>
@@ -47,6 +56,7 @@ import { isLogin } from '../../api/isLogin/isLogin';
                             class="icon iconxingming"
                             v-model="birthplace"
                             placeholder="请填写籍贯"
+                            :disabled="prefix"
                         >
                             <span slot="left-icon" class="icon">&#xe61f;</span>
                         </van-field>
@@ -88,7 +98,7 @@ import { isLogin } from '../../api/isLogin/isLogin';
                 <div class="from-title">
                     <span class="num">6、</span>
                     <span class="title">手机号</span>
-                    <span class="type">(必填)</span>
+                    <span class="type" v-if="!prefix">(必填)</span>
                 </div>
                 <div class="from-radio">
                     <van-cell-group>
@@ -96,6 +106,7 @@ import { isLogin } from '../../api/isLogin/isLogin';
                             class="icon iconxingming"
                             v-model="mobileno"
                             placeholder="请填写手机号"
+                            :disabled="prefix"
                         >
                             <span slot="left-icon" class="icon">&#xe613;</span>
                         </van-field>
@@ -148,22 +159,22 @@ import { isLogin } from '../../api/isLogin/isLogin';
                     <span class="type">(必选)</span>
                 </div>
                 <div class="from-radio">
-                    <van-radio-group
-                        style="justify-content: space-between;"
+                    <van-checkbox-group
+                        style="margin-left:16px;"
                         v-model="seemingly"
                         direction="horizontal"
                         :icon-size="18"
                     >
-                        <van-radio name="1">呼吸困难</van-radio>
-                        <van-radio name="2">发热</van-radio>
-                        <van-radio name="3">乏力</van-radio>
-                        <van-radio name="4">咽喉疼痛</van-radio>
-                        <van-radio name="5">干咳</van-radio>
-                        <van-radio name="6">腹泻</van-radio>
-                        <van-radio name="7">流鼻涕</van-radio>
-                        <van-radio name="8">其它</van-radio>
-                        <van-radio name="9">无</van-radio>
-                    </van-radio-group>
+                        <van-checkbox class="checkBox" name="呼吸困难">呼吸困难</van-checkbox>
+                        <van-checkbox class="checkBox" name="发热">发热</van-checkbox>
+                        <van-checkbox class="checkBox" name="乏力">乏力</van-checkbox>
+                        <van-checkbox class="checkBox" name="咽喉疼痛">咽喉疼痛</van-checkbox>
+                        <van-checkbox class="checkBox" name="干咳">干咳</van-checkbox>
+                        <van-checkbox class="checkBox" name="腹泻">腹泻</van-checkbox>
+                        <van-checkbox class="checkBox" name="流鼻涕">流鼻涕</van-checkbox>
+                        <van-checkbox class="checkBox" name="其它">其它</van-checkbox>
+                        <van-checkbox class="checkBox" name="无">无</van-checkbox>
+                    </van-checkbox-group>
                 </div>
             </div>
             <div class="bottom">
@@ -192,56 +203,97 @@ export default {
       contact: "", //是否接触过疫区人员或途经疫区人员,0、未接触 1、接触过
       hubei: "", //是否去过湖北或途经湖北,0、未去地过、未途径 1、去过或经过
       isfever: "", // 是否发热,0、不发热 1、发热
-      seemingly: "",
+      seemingly: [],
       radio: 0,
-      checked: true
+      checked: false,
+      prefix: false,
+      checkedIsDisable: false
     };
   },
   mounted() {
     this.orgid = this.$route.query.state;
     this.weichatid = this.$route.query.openid;
-    console.log(this.orgid);
+    console.log(this.$route.query);
     console.log(this.weichatid);
+    if (this.$route.query.hasOwnProperty("prefix")) {
+      this.prefix = Boolean(this.$route.query.prefix);
+      let data = JSON.parse(this.$route.query.data);
+      console.log(data);
+      this.name = data.name;
+      this.idno = data.id_no;
+      this.birthplace = data.birthplace;
+      this.address = data.address;
+      this.carno = data.car_no;
+      this.mobileno = data.mobile_no;
+      this.isfever = data.is_fever == "否" ? "0" : "1";
+      this.hubei = data.hubei == "否" ? "0" : "1";
+      this.contact = data.contact == "否" ? "0" : "1";
+      this.checkedIsDisable = data.is_seemingly;
+      console.log(data.is_seemingly.split(","));
+      this.seemingly = data.is_seemingly.split(",");
+    }
   },
   methods: {
+    aaa(e) {
+      console.log(e);
+      console.log(this.seemingly);
+      console.log(this.seemingly.toString());
+    },
     submit() {
-      addUser({
-        orgid: this.orgid,
-        weichatid: this.weichatid,
-        name: this.name,
-        idno: this.idno,
-        address: this.address,
-        birthplace: this.birthplace,
-        mobileno: this.mobileno,
-        carno: this.carno,
-        contact: this.contact,
-        hubei: this.hubei,
-        isfever: this.isfever,
-        seemingly: "无"
-      })
-        .then(res => {
-          if (res.success) {
-            console.log(res);
-            this.$toast({
-              message: res.message,
-              onClose: () => {
-                this.$router.push({
-                  path: "./fangyi",
-                  query: {
-                    openid: this.weichatid,
-                    orgid: this.orgid,
-                    data: res.data.person
-                  }
-                });
-              }
-            });
-          } else {
-            this.$toast(res.message + "请检查填写信息");
-          }
+      if (
+        this.name === "" ||
+        this.idno === "" ||
+        this.address === "" ||
+        this.birthplace === "" ||
+        this.mobileno === "" ||
+        this.carno === "" ||
+        this.isfever === "" ||
+        this.hubei === "" ||
+        this.contact === "" ||
+        this.seemingly === []
+      ) {
+        this.$toast("请填写完整信息");
+      } else if (!this.checked) {
+        this.$toast("请勾选承诺");
+      } else {
+        addUser({
+          orgid: this.orgid,
+          weichatid: this.weichatid,
+          name: this.name,
+          idno: this.idno,
+          address: this.address,
+          birthplace: this.birthplace,
+          mobileno: this.mobileno,
+          carno: this.carno,
+          contact: this.contact,
+          hubei: this.hubei,
+          isfever: this.isfever,
+          seemingly: this.seemingly.toString()
         })
-        .catch(err => {
-          this.$toast(err.message);
-        });
+          .then(res => {
+            if (res.success) {
+              console.log(res);
+              this.$toast({
+                message: res.message,
+                onClose: () => {
+                  this.$router.push({
+                    path: "./fangyi",
+                    query: {
+                      openid: this.weichatid,
+                      orgid: this.orgid,
+                      data: JSON.stringify(res.data.person)
+                    }
+                  });
+                }
+              });
+            } else {
+              this.$toast(res.message + "请检查填写信息");
+            }
+          })
+          .catch(err => {
+            this.$toast(err.message);
+          });
+      }
     }
   }
 };
@@ -290,6 +342,10 @@ export default {
         }
       }
       .from-radio {
+        .checkBox {
+          width: 28%;
+          margin-top: 10px;
+        }
         .van-radio-group {
           padding: 0 12px;
           box-sizing: border-box;

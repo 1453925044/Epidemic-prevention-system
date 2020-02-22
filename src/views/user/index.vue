@@ -5,14 +5,34 @@
             <img src="/static/images/head_img.png" alt="头像" />
             <div class="user-info">
                 <span style="font-size:22px;">人员通行凭证</span>
-                <span>姓名：魏大大</span>
-                <span>手机：15282211107</span>
+                <span>姓名：{{person.name}}</span>
+                <span>手机：{{person.mobile_no}}</span>
             </div>
         </div>
         <div class="from">
-            <div class="cell" v-for="(item,index) in fromList" :key="index">
-                <span class="title">{{item.title}}</span>
-                <van-field v-model="item.data" placeholder="请填写手机号" disabled></van-field>
+            <div class="cell">
+                <span class="title">籍贯</span>
+                <van-field v-model="person.birthplace" disabled></van-field>
+            </div>
+            <div class="cell">
+                <span class="title">车牌</span>
+                <van-field v-model="person.car_no" disabled></van-field>
+            </div>
+            <div class="cell">
+                <span class="title">敏感区域接触史</span>
+                <van-field v-model="person.contact" disabled></van-field>
+            </div>
+            <div class="cell">
+                <span class="title">是否发热</span>
+                <van-field v-model="person.is_fever" disabled></van-field>
+            </div>
+            <div class="cell">
+                <span class="title">途经区域接触史</span>
+                <van-field v-model="person.hubei" disabled></van-field>
+            </div>
+            <div class="cell">
+                <span class="title">疑似症状</span>
+                <van-field v-model="person.is_seemingly" disabled></van-field>
             </div>
         </div>
         <div class="qrcode">
@@ -54,6 +74,7 @@
 </template>
 <script>
 import QRCode from "qrcodejs2";
+import { addLog } from "@/api/addLog/addLog.js";
 export default {
   components: {
     QRCode
@@ -105,15 +126,26 @@ export default {
   mounted() {
     this.orgid = this.$route.query.orgid;
     this.weichatid = this.$route.query.openid;
-    this.person = this.$route.query.data;
+    this.person = JSON.parse(this.$route.query.data);
     console.log(this.orgid);
     console.log(this.weichatid);
     console.log(this.person);
     this.$nextTick(function() {
       this.qrcode();
+      this.handle();
     });
   },
   methods: {
+    // 动态改变对象属性值
+    handle() {
+      this.$set(
+        this.person,
+        "is_fever",
+        this.person.is_fever == 0 ? "否" : "是"
+      );
+      this.$set(this.person, "contact", this.person.contact == 0 ? "否" : "是");
+      this.$set(this.person, "hubei", this.person.hubei == 0 ? "否" : "是");
+    },
     //  生成二维码
     qrcode() {
       let that = this;
@@ -128,7 +160,11 @@ export default {
     },
     jump() {
       this.$router.push({
-        path: "/index"
+        path: "/index",
+        query: {
+          data: JSON.stringify(this.person),
+          prefix: true
+        }
       });
     }
   }
