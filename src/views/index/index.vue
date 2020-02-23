@@ -38,6 +38,7 @@
                             v-model="idno"
                             placeholder="请填写身份证号"
                             :disabled="prefix"
+                            :maxlength="18"
                         >
                             <span slot="left-icon" class="icon">&#xe6d7;</span>
                         </van-field>
@@ -106,6 +107,7 @@
                             class="icon iconxingming"
                             v-model="mobileno"
                             placeholder="请填写手机号"
+                            :maxlength="11"
                             :disabled="prefix"
                         >
                             <span slot="left-icon" class="icon">&#xe613;</span>
@@ -241,18 +243,24 @@ export default {
       }
     },
     addInfo() {
+      var idReg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+      var phoneReg = /^1[3456789]\d{9}$/;
       if (
         this.name === "" ||
-        this.idno === "" ||
         this.address === "" ||
         this.birthplace === "" ||
-        this.mobileno === "" ||
         this.isfever === "" ||
         this.hubei === "" ||
         this.contact === "" ||
         this.seemingly === []
       ) {
         this.$toast("请填写完整信息");
+      } else if (!idReg.test(this.idno)) {
+        this.$toast("请输入正确的身份证号");
+        return false;
+      } else if (!phoneReg.test(this.mobileno)) {
+        this.$toast("请输入正确的手机号");
+        return false;
       } else if (!this.checked) {
         this.$toast("请勾选承诺");
       } else {

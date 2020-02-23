@@ -1,6 +1,6 @@
 import { get, post } from '@/http/http.js'
 
-const isLogin = (info) => post('/ar/login', info)
+const isLogin = (info) => post('/cs_yqfy/ar/login', info)
 /* 
 参数:
 code 微信接口调用凭证

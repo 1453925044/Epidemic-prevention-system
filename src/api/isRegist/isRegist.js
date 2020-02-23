@@ -1,6 +1,6 @@
 import { get, post } from '@/http/http.js'
 
-const isRegist = (info) => post('/ar/silog', info)
+const isRegist = (info) => post('/cs_yqfy/ar/silog', info)
 /* 
 参数:
 person_id 用户id

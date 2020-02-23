@@ -1,6 +1,6 @@
 import { get, post } from '@/http/http.js'
 
-const addLog = (info) => post('/ar/addLog', info)
+const addLog = (info) => post('/cs_yqfy/ar/addLog', info)
 /*
  参数:
   person_id  出入人员id

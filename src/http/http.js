@@ -2,7 +2,7 @@ import axios from 'axios'
 import Qs from 'qs'
 
 //接口基路径
-axios.defaults.baseURL = process.env.NODE_ENV === 'development' ? '/api' : 'http://www.css110.cn:8088';
+axios.defaults.baseURL = process.env.NODE_ENV === 'development' ? '/api' : 'http://www.chinabdc.cn:8088';
 // 请求超时时间
 axios.defaults.timeout = 60000;
 //参数格式化

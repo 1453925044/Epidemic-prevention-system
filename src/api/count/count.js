@@ -1,7 +1,7 @@
 
 import { get, post } from '@/http/http.js'
 
-const intoCouunt = (info) => post('/ar/count', info)
+const intoCouunt = (info) => post('/cs_yqfy/ar/count', info)
 /* 
 参数:
 person_id 用户id

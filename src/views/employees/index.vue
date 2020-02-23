@@ -114,15 +114,15 @@
                         <textarea
                             class="beizhu"
                             maxlength="100"
-                            v-model="remark"
-                            placeholder="请输入备注信息..."
+                            v-model="successRemark"
+                            placeholder="请输入备注信息,如办理事项(过户、抵押、查档、公积金等)"
                         ></textarea>
                     </div>
                 </div>
             </div>
         </div>
         <div class="btnBox">
-            <van-button class="btn" plain type="info" size="large" @click="show = true">禁止进入</van-button>
+            <van-button class="btn" plain type="info" size="large" @click="showInto()">禁止进入</van-button>
             <van-button class="btn" type="info" size="large" @click="ChooseEnter(1)">允许进入</van-button>
         </div>
         <van-overlay :show="show">
@@ -130,15 +130,10 @@
                 <div class="block" @click.stop>
                     <div class="title">
                         <span>填写禁止进入原因</span>
-                        <span>{{length}}/100</span>
+                        <span>{{failRemark.length}}/100</span>
                     </div>
                     <div class="textBox">
-                        <textarea
-                            maxlength="100"
-                            v-model="textValue"
-                            @input="onInput"
-                            placeholder="请输入..."
-                        ></textarea>
+                        <textarea maxlength="100" v-model="failRemark" placeholder="请填写原因"></textarea>
                     </div>
                     <div class="btnBox">
                         <van-button
@@ -194,7 +189,8 @@ export default {
       person: {},
       userId: "",
       prjId: "",
-      remark: "",
+      failRemark: "",
+      successRemark: "",
       temperatureNum: ""
     };
   },
@@ -243,10 +239,11 @@ export default {
         case 0:
           if (this.temperatureNum === "") {
             this.$toast("请输入当前体温");
-          } else if (this.textValue === "") {
+          } else if (this.failRemark === "") {
             this.$toast("请输入禁入原因");
           } else {
             this.addLog(isInto);
+            this.cancel();
           }
           break;
       }
@@ -260,7 +257,7 @@ export default {
         symptom: this.person.is_seemingly, //疑似症状
         is_permit: isInto, //是否允许进入,1:允许,0:不允许
         orgid: this.person.orgid,
-        remark: this.remark
+        remark: this.successRemark == "" ? this.failRemark : this.successRemark
       };
       addLog(parmas)
         .then(res => {
@@ -291,12 +288,13 @@ export default {
           this.dialog("clear", res.message, "#ff6b6b");
         });
     },
+    showInto() {
+      this.show = true;
+      this.successRemark = "";
+    },
     cancel() {
       this.show = false;
-      this.textValue = "";
-    },
-    onInput(e) {
-      this.length = this.textValue.length;
+      this.failRemark = "";
     },
     passInto() {
       this.dialog("checked", "已允许进入", "#6bff79");

@@ -36,37 +36,39 @@
             </div>
         </div>
         <div class="qrcode">
-            <!-- <div class="img"></div> -->
             <div id="qrcode"></div>
             <p v-if="false">超时，点击重新加载</p>
             <van-button @click="jump">修改个人信息</van-button>
         </div>
         <div class="desc">
-            <span>大厅防役登记平台</span>
+            <span>大厅防疫登记平台</span>
             <span>技术支持：成都传晟信息技术有限公司</span>
         </div>
         <van-popup v-model="show" round position="bottom" :style="{ height: '45%' }">
             <div class="popup-content">
-                <p>
-                    <span
-                        class="icon"
-                        :style="{color: isPopup ?'#53e961':'#ff6b6b'}"
-                    >{{isPopup ? '&#xe867;':'&#xe64e;'}}</span>
-                </p>
-                <div class="success" v-if="isPopup">
+                <div class="success" v-if="showInto">
                     <p>
-                        <span class="count">今日已进入{{record.length}}次</span>
+                        <span class="icon" style="color:#53e961;">&#xe867;</span>
                     </p>
-                    <p class="count" v-for="(item,index) in record" :key="index">
+                    <p class="title">
+                        <span class="count">今日已进入{{success.length}}次</span>
+                    </p>
+                    <p class="count" v-for="(item,index) in success" :key="index">
                         <span class="time">{{index+1}}、{{item.create_date}}</span>
                         <span class="time">进入</span>
                     </p>
                 </div>
-                <div class="fail" v-else>
-                    <p class="count">
-                        <span>进入失败</span>
+                <div class="fail" v-if="showFail">
+                    <p>
+                        <span class="icon" style="color:#ff6b6b;">&#xe64e;</span>
                     </p>
-                    <p class="time">体温偏高,请检查登记</p>
+                    <p class="title">
+                        <span class="count">审核失败</span>
+                    </p>
+                    <p class="fail-count" v-for="(item,index) in fail" :key="index">
+                        <span class="time">{{index+1}}、{{item.create_date}}</span>
+                        <span class="reson">{{item.remark ?item.remark:'请到大厅登记'}}</span>
+                    </p>
                 </div>
             </div>
         </van-popup>
@@ -85,10 +87,14 @@ export default {
     return {
       count: 0,
       show: false,
+      showInto: false,
+      showFail: false,
       isPopup: true,
       orgid: "",
       person: {},
       record: [],
+      success: [],
+      fail: [],
       weichatid: ""
     };
   },
@@ -123,8 +129,8 @@ export default {
       let that = this;
       let url = `http://www.chinabdc.cn/blank/?id=${that.person.id}`;
       let qrcode = new QRCode("qrcode", {
-        width: 192,
-        height: 192, // 高度
+        width: 186,
+        height: 186, // 高度
         text: url, // 二维码内容
         render: "canvas", // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
         background: "#409eff", // 背景色
@@ -137,12 +143,35 @@ export default {
         person_id: this.person.id
       })
         .then(res => {
-          if (res.success) {
-            if (this.count < res.data.logs.length) {
-              this.show = true;
-              this.count = res.data.logs.length;
+          let fail = [];
+          let success = [];
+          if (res.success && res.data.logs) {
+            let data = res.data.logs;
+            for (let i in data) {
+              if (data[i].is_permit == 1) {
+                success.push(data[i]);
+              } else if (data[i].is_permit == 0) {
+                fail.push(data[i]);
+              }
             }
-            this.record = res.data.logs;
+            this.success = success;
+            this.fail = fail;
+            if (this.count < data.length) {
+              this.show = true;
+              this.count = data.length;
+              if (this.success.length < this.fail.length) {
+                this.showInto = false;
+                this.showFail = true;
+              } else if ((this.success.length = this.fail.length)) {
+                this.showInto = true;
+                this.showFail = false;
+              } else {
+                this.showInto = true;
+                this.showFail = false;
+              }
+            }
+            success = [];
+            fail = [];
           } else {
             this.show = false;
           }
@@ -281,10 +310,24 @@ export default {
       font-size: 14px;
     }
   }
+  .title {
+    padding: 0px 0;
+    margin: 0;
+  }
   .count {
     display: flex;
     align-items: center;
     justify-content: space-around;
+  }
+  .fail-count {
+    display: flex;
+    margin: 0;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+    .reson {
+      font-size: 14px;
+    }
   }
 }
 </style>

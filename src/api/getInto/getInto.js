@@ -1,7 +1,7 @@
 
 import { get, post } from '@/http/http.js'
 
-const getInto = (info) => post('/ar/getp', info)
+const getInto = (info) => post('/cs_yqfy/ar/getp', info)
 /* 
 参数:
 person_id 用户id

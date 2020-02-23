@@ -1,6 +1,6 @@
 import { get, post } from '@/http/http.js'
 
-const modifyUser = (info) => post('/ar/up', info)
+const modifyUser = (info) => post('/cs_yqfy/ar/up', info)
 /* 
 参数:
 	name 姓名 (非必须参数)
