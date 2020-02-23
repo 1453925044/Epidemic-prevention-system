@@ -15,34 +15,22 @@ const router = new Router({
     {
       path: '/blank',
       name: 'blank',
-      component: resolve => (require(["@/views/blank/index"], resolve)),
-      meta: {
-        title: '大厅防役登记平台'
-      }
+      component: resolve => (require(["@/views/blank/index"], resolve))
     },
     {
       path: '/detail',
       name: 'detail',
-      component: resolve => (require(["@/views/blank/detail"], resolve)),
-      meta: {
-        title: '大厅防役登记平台'
-      }
+      component: resolve => (require(["@/views/blank/detail"], resolve))
     },
     {
       path: '/employees',
       name: 'employees',
-      component: resolve => (require(["@/views/blank/employees"], resolve)),
-      meta: {
-        title: '大厅防役登记平台'
-      }
+      component: resolve => (require(["@/views/blank/employees"], resolve))
     },
     {
       path: '/index',
       name: 'index',
-      component: resolve => (require(["@/views/index/index"], resolve)),
-      meta: {
-        title: '大厅防役登记平台'
-      }
+      component: resolve => (require(["@/views/index/index"], resolve))
     },
     {
       path: '/fangyi',

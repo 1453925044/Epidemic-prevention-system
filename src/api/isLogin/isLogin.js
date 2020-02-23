@@ -4,6 +4,7 @@ const isLogin = (info) => post('/cs_yqfy/ar/login', info)
 /* 
 参数:
 code 微信接口调用凭证
+orgid:组织id
 返回参数:
 	success: true/false 成功/失败
 	message: 成功错误返回消息
@@ -13,5 +14,5 @@ code 微信接口调用凭证
     (根据errCode判断是否注册)
 查询总进入次数: */
 export {
-    isLogin
+	isLogin
 }

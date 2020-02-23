@@ -10,14 +10,14 @@
             </div>
         </div>
         <div class="from">
-            <div class="cell">
+            <!-- <div class="cell">
                 <span class="title">籍贯</span>
                 <van-field v-model="person.birthplace" disabled></van-field>
             </div>
             <div class="cell">
                 <span class="title">车牌</span>
                 <van-field v-model="person.car_no" disabled></van-field>
-            </div>
+            </div>-->
             <div class="cell">
                 <span class="title">敏感区域接触史</span>
                 <van-field v-model="person.contact" disabled></van-field>
@@ -46,7 +46,7 @@
         </div>
         <van-popup v-model="show" round position="bottom" :style="{ height: '45%' }">
             <div class="popup-content">
-                <div class="success" v-if="showInto">
+                <div class="success">
                     <p>
                         <span class="icon" style="color:#53e961;">&#xe867;</span>
                     </p>
@@ -58,7 +58,7 @@
                         <span class="time">进入</span>
                     </p>
                 </div>
-                <div class="fail" v-if="showFail">
+                <!-- <div class="fail" v-if="showFail">
                     <p>
                         <span class="icon" style="color:#ff6b6b;">&#xe64e;</span>
                     </p>
@@ -69,7 +69,7 @@
                         <span class="time">{{index+1}}、{{item.create_date}}</span>
                         <span class="reson">{{item.remark ?item.remark:'请到大厅登记'}}</span>
                     </p>
-                </div>
+                </div>-->
             </div>
         </van-popup>
     </div>
@@ -102,6 +102,7 @@ export default {
     this.orgid = this.$route.query.orgid;
     this.weichatid = this.$route.query.openid;
     this.person = JSON.parse(this.$route.query.data);
+    console.log(this.person);
     this.$nextTick(function() {
       this.qrcode();
       this.handle();
@@ -127,7 +128,11 @@ export default {
     //  生成二维码
     qrcode() {
       let that = this;
-      let url = `http://www.chinabdc.cn/blank/?id=${that.person.id}`;
+      let args = {
+        id: that.person.id,
+        orgid: that.person.orgid
+      };
+      let url = `http://www.chinabdc.cn/blank/?id=${that.person.id}&orgid=${that.person.orgid}`;
       let qrcode = new QRCode("qrcode", {
         width: 186,
         height: 186, // 高度
@@ -150,28 +155,14 @@ export default {
             for (let i in data) {
               if (data[i].is_permit == 1) {
                 success.push(data[i]);
-              } else if (data[i].is_permit == 0) {
-                fail.push(data[i]);
               }
             }
             this.success = success;
-            this.fail = fail;
             if (this.count < data.length) {
               this.show = true;
               this.count = data.length;
-              if (this.success.length < this.fail.length) {
-                this.showInto = false;
-                this.showFail = true;
-              } else if ((this.success.length = this.fail.length)) {
-                this.showInto = true;
-                this.showFail = false;
-              } else {
-                this.showInto = true;
-                this.showFail = false;
-              }
             }
             success = [];
-            fail = [];
           } else {
             this.show = false;
           }

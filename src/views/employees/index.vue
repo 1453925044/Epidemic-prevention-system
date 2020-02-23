@@ -25,7 +25,7 @@
                         <van-field disabled v-model="person.id_no" style="background:#f5f5f5;" />
                     </div>
                 </div>
-                <div>
+                <!-- <div>
                     <span>3、籍贯</span>
                     <div class="input">
                         <span class="icon" style="font-size:20px;">&#xe61f;</span>
@@ -35,45 +35,45 @@
                             style="background:#f5f5f5;"
                         />
                     </div>
-                </div>
-                <div>
+                </div>-->
+                <!-- <div>
                     <span>4、现住址</span>
                     <div class="input">
                         <span class="icon" style="font-size:20px;">&#xe61f;</span>
                         <van-field disabled v-model="person.address" style="background:#f5f5f5;" />
                     </div>
-                </div>
-                <div>
+                </div>-->
+                <!-- <div>
                     <span>5. 车牌号</span>
                     <div class="input">
                         <span class="icon" style="font-size:20px;">&#xe625;</span>
                         <van-field disabled v-model="person.car_no" style="background:#f5f5f5;" />
                     </div>
-                </div>
+                </div>-->
             </div>
             <div>
-                <span>6. 是否发热</span>
+                <span>3. 是否发热</span>
                 <van-radio-group class="radio" disabled v-model="person.is_fever">
                     <van-radio class="radioBox" name="是">是</van-radio>
                     <van-radio class="radioBox" name="否">否</van-radio>
                 </van-radio-group>
             </div>
             <div>
-                <span class="radioTitle">7、1月1日后是否去过（湖北）或途径</span>
+                <span class="radioTitle">4、1月1日后是否去过（湖北）或途径</span>
                 <van-radio-group class="radio" disabled v-model="person.hubei">
                     <van-radio class="radioBox" name="是">是</van-radio>
                     <van-radio class="radioBox" name="否">否</van-radio>
                 </van-radio-group>
             </div>
             <div>
-                <span>8、1月1日后是否与疫区人员接触史</span>
+                <span>5、1月1日后是否与疫区人员接触史</span>
                 <van-radio-group class="radio" disabled v-model="person.contact">
                     <van-radio class="radioBox" name="是">是</van-radio>
                     <van-radio class="radioBox" name="否">否</van-radio>
                 </van-radio-group>
             </div>
             <div>
-                <span>9、是否有疑似病症</span>
+                <span>6、是否有疑似病症</span>
                 <van-checkbox-group class="radio" disabled v-model="person.is_seemingly">
                     <van-checkbox class="radioBox" name="呼吸困难">呼吸困难</van-checkbox>
                     <van-checkbox class="radioBox" name="发热">发热</van-checkbox>
@@ -88,7 +88,7 @@
             </div>
             <div class="inputBox">
                 <div>
-                    <span>10、体温</span>
+                    <span>7、体温</span>
                     <div
                         class="input"
                         style="border:1px solid #cccccc;border-radius:8px;background:white"
@@ -109,7 +109,7 @@
             </div>
             <div class="inputBox">
                 <div>
-                    <span>11、备注</span>
+                    <span>8、备注</span>
                     <div class="textBox">
                         <textarea
                             class="beizhu"
@@ -318,7 +318,7 @@ export default {
 
 <style lang='less' scoped>
 .EmployeeInfo {
-  padding: 20px 12px;
+  padding: 20px 15px;
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -20,7 +20,7 @@ export default {
       var name, value;
       var newArr = [];
       var str = location.href; //取得整个地址栏
-      console.log(str);
+      // console.log(str);
       var num = str.indexOf("?");
       str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
       var arr = str.split("&"); //各个参数放到数组里
@@ -34,13 +34,14 @@ export default {
       }
       this.code = newArr[0];
       this.state = newArr[1];
-      console.log(this.code);
-      console.log(this.state);
+      // console.log(this.code);
+      // console.log(this.state);
       this.getParse();
     },
     getParse() {
       isLogin({
-        code: this.code
+        code: this.code,
+        orgid: this.state
       })
         .then(res => {
           if (res.errCode == "1000") {
@@ -49,10 +50,12 @@ export default {
               path: "/index",
               query: {
                 state: this.state,
+                orgname:res.data.orgname,
                 openid: res.data.openid
               }
             });
-          } else {
+          }
+          else {
             this.$router.push({
               path: "/fangyi",
               query: {

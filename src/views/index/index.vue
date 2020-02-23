@@ -1,8 +1,8 @@
 <template>
     <div class="container">
         <div class="desc">
-            <span class="title">保障办公区安全</span>
-            <span class="title">人员通行证信息填写</span>
+            <!-- <span class="title">保障办公区安全</span> -->
+            <span class="title">{{orgname}}</span>
             <span class="title-text">为了您和他人的健康如实准确填写</span>
         </div>
         <div class="from">
@@ -45,7 +45,7 @@
                     </van-cell-group>
                 </div>
             </div>
-            <div class="from-row">
+            <!-- <div class="from-row">
                 <div class="from-title">
                     <span class="num">3、</span>
                     <span class="title">籍贯</span>
@@ -63,8 +63,8 @@
                         </van-field>
                     </van-cell-group>
                 </div>
-            </div>
-            <div class="from-row">
+            </div>-->
+            <!-- <div class="from-row">
                 <div class="from-title">
                     <span class="num">4、</span>
                     <span class="title">现住址</span>
@@ -81,8 +81,8 @@
                         </van-field>
                     </van-cell-group>
                 </div>
-            </div>
-            <div class="from-row">
+            </div>-->
+            <!-- <div class="from-row">
                 <div class="from-title">
                     <span class="num">5、</span>
                     <span class="title">车牌号</span>
@@ -94,10 +94,10 @@
                         </van-field>
                     </van-cell-group>
                 </div>
-            </div>
+            </div>-->
             <div class="from-row">
                 <div class="from-title">
-                    <span class="num">6、</span>
+                    <span class="num">3、</span>
                     <span class="title">手机号</span>
                     <span class="type" v-if="!prefix">(必填)</span>
                 </div>
@@ -117,7 +117,7 @@
             </div>
             <div class="from-row">
                 <div class="from-title">
-                    <span class="num">7、</span>
+                    <span class="num">4、</span>
                     <span class="title">是否发热</span>
                     <span class="type">(必选)</span>
                 </div>
@@ -130,7 +130,7 @@
             </div>
             <div class="from-row">
                 <div class="from-title">
-                    <span class="num">8、</span>
+                    <span class="num">5、</span>
                     <span class="title">1月1日后是否去过(湖北)</span>
                     <span class="type">(必选)</span>
                 </div>
@@ -143,7 +143,7 @@
             </div>
             <div class="from-row">
                 <div class="from-title">
-                    <span class="num">9、</span>
+                    <span class="num">6、</span>
                     <span class="title">1月1日后是否与疫区人员接触史</span>
                     <span class="type">(必选)</span>
                 </div>
@@ -156,7 +156,7 @@
             </div>
             <div class="from-row">
                 <div class="from-title">
-                    <span class="num">10、</span>
+                    <span class="num">7、</span>
                     <span class="title">是否有疑似症状</span>
                     <span class="type">(必选)</span>
                 </div>
@@ -201,6 +201,7 @@ export default {
       birthplace: "",
       mobileno: "",
       orgid: "",
+      orgname: "",
       weichatid: "",
       carno: "",
       contact: "", //是否接触过疫区人员或途经疫区人员,0、未接触 1、接触过
@@ -215,6 +216,7 @@ export default {
   },
   mounted() {
     this.orgid = this.$route.query.state;
+    this.orgname = this.$route.query.orgname || "防疫登记服务平台";
     this.weichatid = this.$route.query.openid;
     if (this.$route.query.hasOwnProperty("prefix")) {
       this.prefix = Boolean(this.$route.query.prefix);
@@ -223,9 +225,9 @@ export default {
       this.orgid = data.orgid;
       this.name = data.name;
       this.idno = data.id_no;
-      this.birthplace = data.birthplace;
-      this.address = data.address;
-      this.carno = data.car_no;
+      // this.birthplace = data.birthplace;
+      // this.address = data.address;
+      // this.carno = data.car_no;
       this.mobileno = data.mobile_no;
       this.isfever = data.is_fever == "否" ? "0" : "1";
       this.hubei = data.hubei == "否" ? "0" : "1";
@@ -233,8 +235,17 @@ export default {
       this.checkedIsDisable = data.is_seemingly;
       this.seemingly = data.is_seemingly.split(",");
     }
+    this.setTitle();
   },
   methods: {
+    // 根据组织id更改页面title
+    setTitle() {
+      if (this.$route.query.hasOwnProperty("prefix")) {
+        document.title = "人员信息修改";
+      } else {
+        document.title = this.orgname;
+      }
+    },
     submit() {
       if (this.prefix) {
         this.modify();
@@ -247,8 +258,6 @@ export default {
       var phoneReg = /^1[3456789]\d{9}$/;
       if (
         this.name === "" ||
-        this.address === "" ||
-        this.birthplace === "" ||
         this.isfever === "" ||
         this.hubei === "" ||
         this.contact === "" ||
@@ -269,10 +278,10 @@ export default {
           weichatid: this.weichatid,
           name: this.name,
           idno: this.idno,
-          address: this.address,
-          birthplace: this.birthplace,
+          // address: this.address,
+          // carno: this.carno,
+          // birthplace: this.birthplace,
           mobileno: this.mobileno,
-          carno: this.carno,
           contact: this.contact,
           hubei: this.hubei,
           isfever: this.isfever,
@@ -318,10 +327,10 @@ export default {
           weichatid: this.weichatid,
           name: this.name,
           idno: this.idno,
-          address: this.address,
-          birthplace: this.birthplace,
+          // address: this.address,
+          // carno: this.carno,
+          // birthplace: this.birthplace,
           mobileno: this.mobileno,
-          carno: this.carno,
           contact: this.contact,
           hubei: this.hubei,
           isfever: this.isfever,
@@ -357,7 +366,7 @@ export default {
 <style lang="less" scoped>
 .container {
   width: 100%;
-  padding: 0 12px;
+  padding: 0 15px;
   box-sizing: border-box;
   background-color: #ffffff;
   .desc {
@@ -383,6 +392,7 @@ export default {
     margin-top: 16px;
     .from-row {
       width: 100%;
+      box-sizing: border-box;
       margin-bottom: 10px;
       .from-title {
         padding: 6px 0;
@@ -398,6 +408,7 @@ export default {
         }
       }
       .from-radio {
+        box-sizing: border-box;
         .checkBox {
           width: 22%;
           margin-top: 10px;

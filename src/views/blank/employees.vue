@@ -8,7 +8,8 @@ export default {
     return {
       code: "",
       userId: "",
-      openid: ""
+      openid: "",
+      orgid: ""
     };
   },
   mounted() {
@@ -20,7 +21,6 @@ export default {
       var name, value;
       var newArr = [];
       var str = location.href; //取得整个地址栏
-      console.log(str);
       var num = str.indexOf("?");
       str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
       var arr = str.split("&"); //各个参数放到数组里
@@ -33,15 +33,18 @@ export default {
           console.log(newArr);
         }
       }
-      this.code = newArr[0];
-      this.userId = newArr[1];
-      console.log(this.code);
-      console.log(this.userId);
+      this.orgid = newArr[0];
+      this.code = newArr[1];
+      this.userId = newArr[2];
+      // console.log(this.orgid);
+      // console.log(this.code);
+      // console.log(this.userId);
       this.getParse();
     },
     getParse() {
       isLogin({
-        code: this.code
+        code: this.code,
+        orgid: this.orgid
       })
         .then(res => {
           if (res.data.person.can_verify == 1) {

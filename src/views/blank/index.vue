@@ -8,12 +8,14 @@ export default {
       state: "",
       code: "",
       userId: "",
+      orgid: "",
       prefix: false
     };
   },
   created() {
     if (this.$route.query.id) {
       this.userId = this.getQueryString("id");
+      this.orgid = this.getQueryString("orgid");
     } else {
       this.state = this.getQueryString("state");
     }
@@ -23,9 +25,15 @@ export default {
   },
   methods: {
     handle() {
+      let urlBase = "http://www.chinabdc.cn/employees?orgid=" + this.orgid; //定义基本路径
+      // console.log(encodeURIComponent(urlBase));
       var url_one = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdfeb79e40c392970&redirect_uri=http%3A%2F%2Fwww.chinabdc.cn%2Fdetail&response_type=code&state=${this.state}&scope=snsapi_base&connect_redirect=1#wechat_redirect`;
 
-      var url_two = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdfeb79e40c392970&redirect_uri=http%3A%2F%2Fwww.chinabdc.cn%2Femployees&response_type=code&state=${this.userId}&scope=snsapi_base&connect_redirect=1#wechat_redirect`;
+      var url_two = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdfeb79e40c392970&redirect_uri=${encodeURIComponent(
+        urlBase
+      )}&response_type=code&state=${
+        this.userId
+      }&scope=snsapi_base&connect_redirect=1#wechat_redirect`;
       if (this.userId != "") {
         console.log("走的验证");
         window.location.href = url_two;
