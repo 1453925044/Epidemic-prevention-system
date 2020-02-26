@@ -131,7 +131,7 @@
             <div class="from-row">
                 <div class="from-title">
                     <span class="num">5、</span>
-                    <span class="title">1月1日后是否去过(湖北)</span>
+                    <span class="title">2020年1月24日零时后是否去过武汉</span>
                     <span class="type">(必选)</span>
                 </div>
                 <div class="from-radio">
@@ -179,6 +179,25 @@
                     </van-checkbox-group>
                 </div>
             </div>
+            <div class="from-row" v-if="orgid==99900">
+                <div class="from-title">
+                    <span class="num">8、</span>
+                    <span class="title">返京是否满14天</span>
+                    <span class="type">(必选)</span>
+                </div>
+                <div class="from-radio">
+                    <van-radio-group
+                        style="display:flex;flex-direction:column;justify-content:space-between;"
+                        v-model="backBj"
+                        direction="horizontal"
+                        :icon-size="19"
+                    >
+                        <van-radio class="checkBox" name="14天内未离京" style="width:100%">14天内未离京</van-radio>
+                        <van-radio class="checkBox" name="返京满十四天" style="width:100%">返京满十四天</van-radio>
+                        <van-radio class="checkBox" name="返京未满十四天" style="width:100%">返京未满十四天</van-radio>
+                    </van-radio-group>
+                </div>
+            </div>
             <div class="bottom">
                 <van-checkbox
                     v-model="checked"
@@ -211,11 +230,13 @@ export default {
       radio: 0,
       checked: false,
       prefix: false,
-      checkedIsDisable: false
+      checkedIsDisable: false,
+      // 新增字段信息
+      backBj: ""
     };
   },
   mounted() {
-    this.orgid = this.$route.query.state;
+    this.orgid = Number(this.$route.query.state);
     this.orgname = this.$route.query.orgname || "防疫登记服务平台";
     this.weichatid = this.$route.query.openid;
     if (this.$route.query.hasOwnProperty("prefix")) {
@@ -272,6 +293,12 @@ export default {
         return false;
       } else if (!this.checked) {
         this.$toast("请勾选承诺");
+      } else if (this.hubei == "1") {
+        this.$toast("因您2020年1月24日零时后是否去过武汉,请您居家隔离");
+      } else if (this.backBj == "返京未满十四天") {
+        this.$toast("因您离京未满14天，请您居家隔离满14天后再出门");
+      } else if (this.seemingly != "无") {
+        this.$toast("因您有不适症状请您康复后再来办理业务");
       } else {
         addUser({
           orgid: this.orgid,

@@ -48,7 +48,6 @@ export default {
       })
         .then(res => {
           if (res.data.person.can_verify == 1) {
-            alert("欢迎审核工作人员");
             this.$router.push({
               path: "/employeeInfo",
               query: {
@@ -57,11 +56,19 @@ export default {
               }
             });
           } else {
-            this.$toast("抱歉，您没有审核权限");
+            this.$dialog.alert({
+              message: "您当前没有审核权限,如是审核人员,请联系后台人员添加权限"
+            });
           }
         })
         .catch(err => {
-          this.$toast(err.message);
+          this.$toast({
+            message: "抱歉，您没有审核权限,请先注册",
+            onClose: () => {
+              window.location.href =
+                "http://www.chinabdc.cn/?state=" + this.orgid;
+            }
+          });
         });
     }
   }

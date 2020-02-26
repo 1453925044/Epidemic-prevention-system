@@ -11,7 +11,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://www.chinabdc.cn:8088',// 本地接口的域名
+        target: 'http://www.chinabdc.cn:8093',// 本地接口的域名
         secure: false,  // 如果是https接口，需要配置这个参数
         changeOrigin: true, // 如果接口跨域，需要进行这个参数配置，为true的话，请求的header将会设置为匹配目标服务器的规则（Access-Control-Allow-Origin）
         pathRewrite: {
@@ -20,7 +20,7 @@ module.exports = {
       }
     },
     // Various Dev Server settings
-    host: '192.168.1.123', // can be overwritten by process.env.HOST
+    host: '192.168.101.5', // can be overwritten by process.env.HOST
     port: 8081, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,

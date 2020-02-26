@@ -191,7 +191,8 @@ export default {
       prjId: "",
       failRemark: "",
       successRemark: "",
-      temperatureNum: ""
+      temperatureNum: "",
+      result: ""
     };
   },
   created() {
@@ -232,6 +233,10 @@ export default {
         case 1:
           if (this.temperatureNum === "") {
             this.$toast("请输入当前体温");
+          } else if (this.temperature >= 37.3) {
+            this.$toast("体温高于37.3，禁止入内");
+            this.failRemark = "体温高于37.3，禁止入内";
+            this.addLog(0);
           } else {
             this.addLog(isInto);
           }
@@ -257,19 +262,43 @@ export default {
         symptom: this.person.is_seemingly, //疑似症状
         is_permit: isInto, //是否允许进入,1:允许,0:不允许
         orgid: this.person.orgid,
-        remark: this.successRemark == "" ? this.failRemark : this.successRemark
+        remark: this.successRemark == "" ? this.failRemark : this.successRemark,
+        url: location.href
       };
       addLog(parmas)
         .then(res => {
           if (res.success) {
+            let data = res.data;
             this.dialog("checked", res.message, "#6bff79");
             this.getCount();
+            // 扫描完成之后调用微信扫一扫;
+            wx.config({
+              debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+              appId: "wxdfeb79e40c392970", // 必填，公众号的唯一标识
+              timestamp: data.sign.timestamp, //  1b 必填，生成签名的时间戳
+              nonceStr: data.sign.noncestr, // 必填，生成签名的随机串
+              signature: data.sign.signature, // 必填，签名
+              jsApiList: ["scanQRCode"] // 必填，需要使用的JS接口列表
+            });
+            setTimeout(() => {
+              wx.scanQRCode({
+                needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                success: function(res) {
+                  this.result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                  window.location.href = this.result;
+                },
+                fail: function(err) {
+                  this.$toast("调用扫码失败");
+                }
+              });
+            }, 2000);
           } else {
             this.dialog("clear", res.message, "#ff6b6b");
           }
         })
         .catch(err => {
-          this.$toase(err.message);
+          this.$toast(err.message);
         });
     },
     getCount() {
@@ -311,6 +340,19 @@ export default {
       setTimeout(() => {
         this.toastShow = false;
       }, 1000);
+    },
+    // 调用微信扫码功能
+    wxScanCode() {
+      wx.scanQRCode({
+        desc: "scanQRCode desc",
+        needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+        scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+        success: function(res) {
+          console.log("调用成功");
+          var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+          alert(result);
+        }
+      });
     }
   }
 };

@@ -44,6 +44,7 @@
             <span>大厅防疫登记平台</span>
             <span>技术支持：成都传晟信息技术有限公司</span>
         </div>
+        <!-- <van-button @click="scanQRCode">点击扫码</van-button> -->
         <van-popup v-model="show" round position="bottom" :style="{ height: '45%' }">
             <div class="popup-content">
                 <div class="success">
@@ -95,7 +96,8 @@ export default {
       record: [],
       success: [],
       fail: [],
-      weichatid: ""
+      weichatid: "",
+      ticket: ""
     };
   },
   mounted() {
